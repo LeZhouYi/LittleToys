@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sudoku {
-	
+
 	private List<SudokuCell> sudokuCells;
-	
+
 	public Sudoku() {
 		this.sudokuCells = new ArrayList<>();
 		for (int row = 0; row < 9; row++) {
@@ -19,5 +19,5 @@ public class Sudoku {
 	public SudokuCell getCell(int row, int column) {
 		return this.sudokuCells.get(row*9+column);
 	}
-	
+
 }

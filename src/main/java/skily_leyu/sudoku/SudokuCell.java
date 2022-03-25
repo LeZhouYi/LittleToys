@@ -17,16 +17,16 @@ public class SudokuCell {
     private int udpateTick;
 
     public SudokuCell(int row, int column) {
-    	this.now=EMPTY;
-    	this.optionalValues = new int[] {1,2,3,4,5,6,7,8,9};
-    	this.row = row;
-    	this.column = column;
-    	this.isTrue = true;
-    	this.isFixed = false;
-    	this.baseColor = Color.WHITE.getRGB();
-    	this.updateColor = EMPTY;
-    	this.updateTime = EMPTY;
-    	this.udpateTick = EMPTY;
+        this.now=EMPTY;
+        this.optionalValues = new int[] {1,2,3,4,5,6,7,8,9};
+        this.row = row;
+        this.column = column;
+        this.isTrue = true;
+        this.isFixed = false;
+        this.baseColor = Color.WHITE.getRGB();
+        this.updateColor = EMPTY;
+        this.updateTime = EMPTY;
+        this.udpateTick = EMPTY;
     }
-    
+
 }
