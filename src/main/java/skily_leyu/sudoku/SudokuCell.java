@@ -1,7 +1,10 @@
 package main.java.skily_leyu.sudoku;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SudokuCell {
 	public static final int EMPTY = 0;
@@ -35,6 +38,7 @@ public class SudokuCell {
 
 	/**
 	 * 返回当前格子要显示的字符串
+	 *
 	 * @return
 	 */
 	public String getNowString() {
@@ -43,17 +47,18 @@ public class SudokuCell {
 
 	/**
 	 * 返回当前格子要显示的颜色
+	 *
 	 * @return
 	 */
 	public Color getColor() {
 		if (now == EMPTY) {
 			Color updateColor = getUpdateColor();
-			if(updateColor!=null) {
+			if (updateColor != null) {
 				return updateColor;
 			}
-			return getStepColor( COLOR_BASE,COLOR_BACKGROUND,getOptionalValuesLength(),9.0F);
-		}else {
-			if(isFixed) {
+			return getStepColor(COLOR_BASE, COLOR_BACKGROUND, getOptionalValuesLength(), 9.0F);
+		} else {
+			if (isFixed) {
 				return COLOR_FIXED;
 			}
 			return COLOR_BASE;
@@ -62,15 +67,16 @@ public class SudokuCell {
 
 	/**
 	 * 获得当前短暂显示的颜色，若有
+	 *
 	 * @return
 	 */
 	public Color getUpdateColor() {
-		long nowTick = new Date().getTime()/100-this.updateTime;
-		if(this.updateTick!=EMPTY) {
-			if(nowTick<this.updateTick*10) {
-				return getStepColor(this.updateColor, COLOR_BACKGROUND, (int)nowTick, this.updateTick*10);
-			}else {
-				this.updateTick=EMPTY;
+		long nowTick = new Date().getTime() / 100 - this.updateTime;
+		if (this.updateTick != EMPTY) {
+			if (nowTick < this.updateTick * 10) {
+				return getStepColor(this.updateColor, COLOR_BACKGROUND, (int) nowTick, this.updateTick * 10);
+			} else {
+				this.updateTick = EMPTY;
 			}
 		}
 		return null;
@@ -78,6 +84,7 @@ public class SudokuCell {
 
 	/**
 	 * 获得当前格子可选值的长度
+	 *
 	 * @return
 	 */
 	public int getOptionalValuesLength() {
@@ -92,13 +99,14 @@ public class SudokuCell {
 
 	/**
 	 * 根据比例返回当可选的渐变颜色
-	 * @param base 基础色
+	 *
+	 * @param base      基础色
 	 * @param backgroud 渐变方向色
-	 * @param nowStep 当前步数
-	 * @param step 总步长
+	 * @param nowStep   当前步数
+	 * @param step      总步长
 	 * @return
 	 */
-	public static Color getStepColor(Color base,Color backgroud, int nowStep,float step) {
+	public static Color getStepColor(Color base, Color backgroud, int nowStep, float step) {
 		int red = base.getRed() - backgroud.getRed();
 		int blue = base.getBlue() - backgroud.getBlue();
 		int green = base.getGreen() - backgroud.getGreen();
@@ -110,6 +118,7 @@ public class SudokuCell {
 
 	/**
 	 * 获得当前格子可输入的可选值
+	 *
 	 * @return
 	 */
 	public int[] getOptionalValues() {
@@ -118,6 +127,7 @@ public class SudokuCell {
 
 	/**
 	 * 获得当前格子显示的值
+	 *
 	 * @return
 	 */
 	public int getNow() {
@@ -126,6 +136,7 @@ public class SudokuCell {
 
 	/**
 	 * 设置当前格子显示值并清除错误标记
+	 *
 	 * @param now
 	 */
 	public void setNow(int now) {
@@ -135,6 +146,7 @@ public class SudokuCell {
 
 	/**
 	 * 设置当前格子是否是正确的
+	 *
 	 * @param isTure
 	 */
 	public void setIsTrue(boolean isTure) {
@@ -143,6 +155,7 @@ public class SudokuCell {
 
 	/**
 	 * 当前格子所在的行
+	 *
 	 * @return [0,8]
 	 */
 	public int getRow() {
@@ -151,6 +164,7 @@ public class SudokuCell {
 
 	/**
 	 * 当前格子所在的列
+	 *
 	 * @return [0,8]
 	 */
 	public int getColumn() {
@@ -159,37 +173,40 @@ public class SudokuCell {
 
 	/**
 	 * 消除当前可选值
+	 *
 	 * @param updateValues[1,9]
 	 */
 	public void setOptionalValuesEmpty(int updateValues) {
-		if(updateValues!=EMPTY) {
-			this.optionalValues[updateValues-1]=EMPTY;
+		if (updateValues != EMPTY) {
+			this.optionalValues[updateValues - 1] = EMPTY;
 		}
 	}
 
 	/**
 	 * 获得当前格子所在的宫
+	 *
 	 * @return [0,8]
 	 */
 	public int getCellIndex() {
-		return this.row/3*3+this.column/3;
+		return this.row / 3 * 3 + this.column / 3;
 	}
 
 	/**
 	 * 锁定/解锁当前格子
 	 */
 	public void setIsFixed() {
-		if(this.now!=EMPTY) {
-			this.isFixed=!this.isFixed;
+		if (this.now != EMPTY) {
+			this.isFixed = !this.isFixed;
 		}
 	}
 
 	/**
 	 * 当前格子是否被锁定
+	 *
 	 * @return
 	 */
 	public boolean isFixed() {
-		if(this.now!=EMPTY) {
+		if (this.now != EMPTY) {
 			return this.isFixed;
 		}
 		return false;
@@ -197,35 +214,38 @@ public class SudokuCell {
 
 	/**
 	 * 增加当前可选值
+	 *
 	 * @param optinalValue 当前可选值
 	 */
 	public void setOptionalValuesValue(int optinalValue) {
-		if(optinalValue!=EMPTY) {
-			this.optionalValues[optinalValue-1]=optinalValue;
+		if (optinalValue != EMPTY) {
+			this.optionalValues[optinalValue - 1] = optinalValue;
 		}
 	}
 
 	/**
 	 * 查找可选值中是否存在该值
+	 *
 	 * @param findValues 要寻找的值[1,9]
 	 * @return
 	 */
 	public boolean isOptionalExist(int findValues) {
-		if(findValues!=EMPTY) {
-			return this.optionalValues[findValues-1]==findValues;			
+		if (findValues != EMPTY) {
+			return this.optionalValues[findValues - 1] == findValues;
 		}
 		return false;
 	}
 
 	/**
 	 * 将当前值外的值设置为EMPTY
+	 *
 	 * @param value 当前值[1,9]
 	 */
 	public void setOtherValuesEmpty(int value) {
-		if(value!=EMPTY) {
-			for(int teValue:this.optionalValues) {
-				if(teValue!=EMPTY&&teValue!=value) {
-					this.optionalValues[teValue-1]=EMPTY;
+		if (value != EMPTY) {
+			for (int teValue : this.optionalValues) {
+				if (teValue != EMPTY && teValue != value) {
+					this.optionalValues[teValue - 1] = EMPTY;
 				}
 			}
 		}
@@ -233,14 +253,48 @@ public class SudokuCell {
 
 	/**
 	 * 设置短暂更新的颜色
-	 * @param color 基本色
+	 *
+	 * @param color   基本色
 	 * @param nowTime 设置颜色的时间
-	 * @param second 显示该颜色的秒数
+	 * @param second  显示该颜色的秒数
 	 */
 	public void setUpdateColor(Color color, long nowTime, int second) {
 		this.updateColor = color;
 		this.updateTime = nowTime;
 		this.updateTick = second;
+	}
+
+	/**
+	 * 获取当前格子行列的坐标形式值
+	 *
+	 * @return
+	 */
+	public Point getPoint() {
+		return new Point(row, column);
+	}
+
+	/**
+	 * 判断当前输入值是否为空
+	 *
+	 * @return
+	 */
+	public boolean isEmpty() {
+		return this.now == EMPTY;
+	}
+
+	/**
+	 * 获取当前格子不含Empty的可选值数组
+	 *
+	 * @return
+	 */
+	public List<Integer> getOptionalValuesArray() {
+		List<Integer> arrays = new ArrayList<>();
+		for (int value : optionalValues) {
+			if (value != EMPTY) {
+				arrays.add(value);
+			}
+		}
+		return arrays;
 	}
 
 }

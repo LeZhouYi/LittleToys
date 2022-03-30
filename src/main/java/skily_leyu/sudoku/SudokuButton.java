@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+@SuppressWarnings("serial")
 public class SudokuButton extends JButton {
 
 	private SudokuCell sudokuCell;
@@ -16,8 +17,8 @@ public class SudokuButton extends JButton {
 	private JPopupMenu optionalMenu;
 	private SudokuFrame sudokuFrame;
 
-	public SudokuButton(SudokuFrame sudokuFrame,Sudoku sudoku, SudokuCell sudokuCell) {
-		this.sudokuFrame=sudokuFrame;
+	public SudokuButton(SudokuFrame sudokuFrame, Sudoku sudoku, SudokuCell sudokuCell) {
+		this.sudokuFrame = sudokuFrame;
 		this.sudoku = sudoku;
 		this.sudokuCell = sudokuCell;
 		this.setFont(new Font("宋体", Font.PLAIN, 20));
@@ -25,15 +26,14 @@ public class SudokuButton extends JButton {
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(e.getButton()==MouseEvent.BUTTON1) {
+				if (e.getButton() == MouseEvent.BUTTON1) {
 					updateMenu();
 					optionalMenu.show(e.getComponent(), e.getX(), e.getY());
-				}
-				else if(e.getButton()==MouseEvent.BUTTON2) {
+				} else if (e.getButton() == MouseEvent.BUTTON2) {
 					sudokuCell.setIsFixed();
 					updateButton();
-				}else if(e.getButton()==MouseEvent.BUTTON3) {
-					if(!sudokuCell.isFixed()) {
+				} else if (e.getButton() == MouseEvent.BUTTON3) {
+					if (!sudokuCell.isFixed()) {
 						int before = sudokuCell.getNow();
 						sudokuCell.setNow(SudokuCell.EMPTY);
 						sudoku.rebackOptionalValues(sudokuCell, before);

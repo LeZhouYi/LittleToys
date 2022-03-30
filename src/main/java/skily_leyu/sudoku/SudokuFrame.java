@@ -20,6 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+@SuppressWarnings("serial")
 public class SudokuFrame extends JFrame {
 
 	private JPanel contentPane;
@@ -30,6 +31,7 @@ public class SudokuFrame extends JFrame {
 	private Sudoku sudoku;
 
 	private JPopupMenu popupMenu = new JPopupMenu();
+
 	/**
 	 * Launch the application.
 	 */
@@ -59,33 +61,33 @@ public class SudokuFrame extends JFrame {
 		this.setSize(500, 500);
 		this.setFocusTraversalKeysEnabled(false);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		int x = (int)(toolkit.getScreenSize().getWidth()-this.getWidth())/2;
-		int y = (int)(toolkit.getScreenSize().getHeight()-this.getHeight())/2;
+		int x = (int) (toolkit.getScreenSize().getWidth() - this.getWidth()) / 2;
+		int y = (int) (toolkit.getScreenSize().getHeight() - this.getHeight()) / 2;
 		this.setLocation(x, y);
-		
+
 		initSudoku();
-		
+
 		initPopMenu();
-		
+
 		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-			
+
 			@Override
 			public void eventDispatched(AWTEvent event) {
-				KeyEvent keyEvent = ((KeyEvent)event);
-				if(keyEvent.getID()==KeyEvent.KEY_PRESSED) {
-					if(keyEvent.getKeyCode()==KeyEvent.VK_TAB) {
+				KeyEvent keyEvent = ((KeyEvent) event);
+				if (keyEvent.getID() == KeyEvent.KEY_PRESSED) {
+					if (keyEvent.getKeyCode() == KeyEvent.VK_TAB) {
 						Point framePoint = getFrame().getLocation();
-						int xMin = (int)framePoint.getX()+10;
-						int xMax = (int)framePoint.getX()+getFrame().getWidth()-10;
-						int yMin = (int)framePoint.getY()+30;
-						int yMax = (int)framePoint.getY()+getFrame().getHeight()-10;
+						int xMin = (int) framePoint.getX() + 10;
+						int xMax = (int) framePoint.getX() + getFrame().getWidth() - 10;
+						int yMin = (int) framePoint.getY() + 30;
+						int yMax = (int) framePoint.getY() + getFrame().getHeight() - 10;
 
 						Point mousePoint = MouseInfo.getPointerInfo().getLocation();
-						int mouseX = (int)mousePoint.getX();
-						int mouseY = (int)mousePoint.getY();
-						
-						if(mouseX>=xMin&&mouseX<=xMax&&mouseY>=yMin&&mouseY<=yMax) {
-							popupMenu.show(getFrame(), mouseX-xMin, mouseY-yMin);
+						int mouseX = (int) mousePoint.getX();
+						int mouseY = (int) mousePoint.getY();
+
+						if (mouseX >= xMin && mouseX <= xMax && mouseY >= yMin && mouseY <= yMax) {
+							popupMenu.show(getFrame(), mouseX - xMin, mouseY - yMin);
 						}
 					}
 				}
@@ -102,13 +104,13 @@ public class SudokuFrame extends JFrame {
 					@Override
 					public void run() {
 						List<Point> points = sudoku.showCellInferredValues();
-						if(points.size()>0) {
-							long nowTime = new Date().getTime()/100;
-							for(Point point:points) {
-								sudoku.getCell(point.x, point.y).setUpdateColor(new Color(0xCCFF99),nowTime,3);
+						if (points.size() > 0) {
+							long nowTime = new Date().getTime() / 100;
+							for (Point point : points) {
+								sudoku.getCell(point.x, point.y).setUpdateColor(new Color(0xCCFF99), nowTime, 3);
 							}
-							while(new Date().getTime()/100-nowTime<3*10) {
-								for(Point point:points) {
+							while (new Date().getTime() / 100 - nowTime < 3 * 10) {
+								for (Point point : points) {
 									getSudokuButton(point.x, point.y).updateButton();
 								}
 							}
@@ -118,7 +120,7 @@ public class SudokuFrame extends JFrame {
 			}
 		});
 		this.popupMenu.add(findItem);
-		
+
 		JMenuItem outItem = new JMenuItem("推测");
 		outItem.addMouseListener(new MouseAdapter() {
 			@Override
@@ -126,6 +128,11 @@ public class SudokuFrame extends JFrame {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
+						sudoku.updateOutCellMatch();
+						sudoku.updateInCellMatch();
+						for (SudokuButton sudokuButton : cellBtns) {
+							sudokuButton.updateButton();
+						}
 					}
 				}).start();
 			}
@@ -136,7 +143,7 @@ public class SudokuFrame extends JFrame {
 	private JFrame getFrame() {
 		return this;
 	}
-	
+
 	protected void initSudoku() {
 		this.sudoku = new Sudoku();
 		this.cellPanels = new ArrayList<>();
@@ -152,7 +159,7 @@ public class SudokuFrame extends JFrame {
 
 		for (int row = 0; row < 9; row++) {
 			for (int column = 0; column < 9; column++) {
-				SudokuButton cellBtn = new SudokuButton(this,this.sudoku,this.sudoku.getCell(row,column));
+				SudokuButton cellBtn = new SudokuButton(this, this.sudoku, this.sudoku.getCell(row, column));
 
 				int cellIndex = (row / 3) * 3 + column / 3;
 
@@ -166,29 +173,29 @@ public class SudokuFrame extends JFrame {
 		int row = sudokuCell.getRow();
 		int column = sudokuCell.getColumn();
 		for (int teRow = 0; teRow < 9; teRow++) {
-			if (teRow!=row) {
+			if (teRow != row) {
 				this.getSudokuButton(teRow, column).updateButton();
 			}
 		}
 		for (int teColumn = 0; teColumn < 9; teColumn++) {
-			if (teColumn!=column) {
+			if (teColumn != column) {
 				this.getSudokuButton(row, teColumn).updateButton();
 			}
 		}
 		int cellIndex = sudokuCell.getCellIndex();
-		int cellRow = (cellIndex/3)*3;
-		int cellColumn = (cellIndex%3)*3;
+		int cellRow = (cellIndex / 3) * 3;
+		int cellColumn = (cellIndex % 3) * 3;
 		for (int teRow = 0; teRow < 3; teRow++) {
 			for (int teColumn = 0; teColumn < 3; teColumn++) {
-				if (teRow+cellRow!=row&&teColumn+cellColumn!=column) {
-					this.getSudokuButton(teRow+cellRow, teColumn+cellColumn).updateButton();
+				if (teRow + cellRow != row && teColumn + cellColumn != column) {
+					this.getSudokuButton(teRow + cellRow, teColumn + cellColumn).updateButton();
 				}
 			}
 		}
 	}
 
 	public SudokuButton getSudokuButton(int row, int column) {
-		return this.cellBtns.get(row*9+column);
+		return this.cellBtns.get(row * 9 + column);
 	}
-	
+
 }
