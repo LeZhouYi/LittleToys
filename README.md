@@ -1,7 +1,7 @@
 # LittleToys
 For the implementation of some small games or simple tools
 
-## [Sudoku](https://github.com/LeZhouYi/LittleToys/blob/main/instance/suduku.jar)
+## [Sudoku](https://github.com/LeZhouYi/LittleToys/blob/main/instance/sudoku.jar)
 #### 初衷:
 - 游玩数独有时力不从心，想要工具来尝试模拟/辅助人推演时过程并逐步完善数独
 - 因此没有完全实现数独的完全解谜，需要手工输入格子和调用推测功能。并且某些数独用我掌握的推测方法不能推测出唯一值，但够用了
