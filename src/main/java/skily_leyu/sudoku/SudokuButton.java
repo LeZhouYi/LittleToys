@@ -45,6 +45,21 @@ public class SudokuButton extends JButton {
 		});
 	}
 
+	/**
+	 * 获取当前宫序号
+	 *
+	 * @return
+	 */
+	public int getCellIndex() {
+		return this.sudokuCell.getCellIndex();
+	}
+
+	public void updateButton() {
+		this.setText(sudokuCell.getNowString());
+		this.setBackground(sudokuCell.getColor());
+		this.setFocusPainted(false);
+	}
+
 	public void updateMenu() {
 		this.optionalMenu = new JPopupMenu();
 		if (this.sudokuCell.getOptionalValues() == null) {
@@ -72,10 +87,9 @@ public class SudokuButton extends JButton {
 		}
 	}
 
-	public void updateButton() {
-		this.setText(sudokuCell.getNowString());
-		this.setBackground(sudokuCell.getColor());
-		this.setFocusPainted(false);
+	public void updateSudoku(Sudoku sudoku, SudokuCell sudokuCell) {
+		this.sudoku = sudoku;
+		this.sudokuCell = sudokuCell;
 	}
 
 }
